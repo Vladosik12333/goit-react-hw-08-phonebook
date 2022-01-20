@@ -1,0 +1,12 @@
+@import-normalize;
+
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.helloUser {
+  margin: 100px auto;
+  width: 120px;
+}
