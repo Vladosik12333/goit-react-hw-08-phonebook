@@ -2,4 +2,6 @@ import { createAction } from '@reduxjs/toolkit';
 
 export const authUser = createAction('user/login');
 export const exitUser = createAction('user/logout');
-export const hasCurrentUser = createAction('user/hasCurrentUser');
+export const isTriedLoadCurrentUser = createAction(
+  'user/isTriedLoadCurrentUser',
+);
