@@ -1,10 +1,10 @@
 import React, { useEffect, lazy, Suspense } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Redirect, Switch } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Toaster } from 'react-hot-toast';
 import { userAPI } from 'redux/services';
-import { actions, selectors } from 'redux/user';
+import { actions } from 'redux/user';
 import PublicRouter from 'components/_routes/PublicRouter';
 import PrivateRouter from 'components/_routes/PrivateRouter';
 import AppBar from 'components/AppBar/AppBar';
@@ -16,25 +16,23 @@ const RegisterView = lazy(() => import('views/RegisterView'));
 
 export default function App() {
   const dispatch = useDispatch();
-  const status = useSelector(selectors.getisTriedLoadCurrentUser);
   const token = Cookies.get('token');
-  const { isSuccess, data, isError, error } = userAPI.useUserQuery(token, {
-    skip: !token,
-  });
+  const { isSuccess, data, isError, error, isLoading } = userAPI.useUserQuery(
+    token,
+    {
+      skip: !token,
+    },
+  );
 
   useEffect(() => {
-    if (!token) {
-      dispatch(actions.isTriedLoadCurrentUser());
-    }
-
     if (isSuccess) {
       dispatch(actions.authUser({ user: data, token }));
-      dispatch(actions.isTriedLoadCurrentUser());
+      return;
     }
 
     if (isError) {
       console.log(error);
-      dispatch(actions.isTriedLoadCurrentUser());
+      return;
     }
   }, [isSuccess, isError]);
 
@@ -44,22 +42,27 @@ export default function App() {
       : { position: 'bottom-center' };
 
   return (
-    status && (
+    !isLoading && (
       <div>
         <AppBar />
 
         <Switch>
           <Suspense fallback={<h1 className="helloUser">Loading...</h1>}>
-            <PublicRouter path="/" exact>
+            <PublicRouter exact path="/">
               <HomeView />
             </PublicRouter>
-            <PublicRouter path="/login" restricted>
+            <PublicRouter exact path="/login" redirectTo="/contacts" restricted>
               <LoginView />
             </PublicRouter>
-            <PublicRouter path="/register" restricted>
+            <PublicRouter
+              exact
+              path="/register"
+              redirectTo="/contacts"
+              restricted
+            >
               <RegisterView />
             </PublicRouter>
-            <PrivateRouter path="/contacts">
+            <PrivateRouter path="/contacts" redirectTo="/login">
               <ContactsView />
             </PrivateRouter>
           </Suspense>

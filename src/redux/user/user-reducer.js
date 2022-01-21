@@ -17,15 +17,10 @@ const token = createReducer(null, {
   [actions.exitUser]: () => null,
 });
 
-const isTriedLoadCurrentUser = createReducer(false, {
-  [actions.isTriedLoadCurrentUser]: state => !state,
-});
-
 const user = combineReducers({
   isLoggined,
   token,
   email,
-  isTriedLoadCurrentUser,
 });
 
 export default user;

@@ -6,13 +6,14 @@ import propTypes from 'prop-types';
 export default function PublicRouter({
   children,
   restricted = false,
+  redirectTo = '/',
   ...routeProps
 }) {
   const status = useSelector(selectors.getIsLoggined);
   const needRestricted = status && restricted;
   return (
     <Route {...routeProps}>
-      {needRestricted ? <Redirect to="/" /> : children}
+      {needRestricted ? <Redirect to={redirectTo} /> : children}
     </Route>
   );
 }
