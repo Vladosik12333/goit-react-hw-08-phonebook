@@ -49,7 +49,7 @@ export default function App() {
         <AppBar />
 
         <Switch>
-          <Suspense fallback={<h1>Loading...</h1>}>
+          <Suspense fallback={<h1 className="helloUser">Loading...</h1>}>
             <PublicRouter path="/" exact>
               <HomeView />
             </PublicRouter>
